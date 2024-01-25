@@ -1,0 +1,11 @@
+# Ignore .ipynb_checkpoints
+.ipynb_checkpoints/
+
+# Ignore directories named x and y
+ny_taxi_postgres_data/
+data_pgadmin/
+
+# Ignore specific files
+taxi+_zone_lookup.csv
+yellow_tripdata_2021-01.csv
+green_tripdata_2019-09.csv.gz
