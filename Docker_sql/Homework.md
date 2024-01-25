@@ -25,7 +25,8 @@ Which tag has the following text? - *Automatically remove the container when it 
 - `--rmc`
 - `--rm`
 
-** answer : rm
+### Answer : 
+- `--rm`
 
 ## Question 2. Understanding docker first run 
 
@@ -40,7 +41,7 @@ What is version of the package *wheel* ?
 - 58.1.0
 
 
-** answer 
+### Answer : 
 docker run -it --entrypoint=/bin/bash python:3.9
 pip list
 
@@ -74,6 +75,14 @@ Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in 
 - 15859
 - 89009
 
+### Answer : 
+SELECT COUNT(*)
+FROM green_taxi_trips a
+where CAST(a.lpep_pickup_datetime AS DATE) = '2019-09-18'
+    AND CAST(a.lpep_dropoff_datetime AS DATE) = '2019-09-18';
+- 15612
+
+
 ## Question 4. Largest trip for each day
 
 Which was the pick up day with the largest trip distance
@@ -84,6 +93,14 @@ Use the pick up time for your calculations.
 - 2019-09-26
 - 2019-09-21
 
+### Answer : 
+SELECT lpep_pickup_datetime
+FROM green_taxi_trips
+where trip_distance = (select MAX(trip_distance) FROM green_taxi_trips)
+
+"2019-09-26 19:32:52"
+
+- 2019-09-26
 
 ## Question 5. Three biggest pick up Boroughs
 
@@ -95,8 +112,24 @@ Which were the 3 pick up Boroughs that had a sum of total_amount superior to 500
 - "Bronx" "Brooklyn" "Manhattan"
 - "Bronx" "Manhattan" "Queens" 
 - "Brooklyn" "Queens" "Staten Island"
+### Answer : 
+SELECT 
+t."Borough" ,
+SUM(g.total_amount) AS total_amount_sum
+FROM green_taxi_trips g
+left join  taxi_zone_lookup t on g."PULocationID" = t."LocationID"
+WHERE
+    CAST(g.lpep_pickup_datetime AS DATE) = '2019-09-18'
+    AND t."Borough" <> 'Unknown'
+GROUP BY
+    t."Borough" 
+HAVING
+    SUM(g.total_amount) > 50000
+ORDER BY 
+	SUM(g.total_amount) DESC
+limit 3
 
-
+- "Bronx" "Manhattan" "Queens" 
 ## Question 6. Largest tip
 
 For the passengers picked up in September 2019 in the zone name Astoria which was the drop off zone that had the largest tip?
@@ -110,6 +143,24 @@ Note: it's not a typo, it's `tip` , not `trip`
 - Long Island City/Queens Plaza
 
 
+### Answer : 
+SELECT 
+    d."Zone" AS drop_off_zone,
+    SUM(g.tip_amount) AS tip_amount_sum
+FROM green_taxi_trips g
+LEFT JOIN taxi_zone_lookup d ON g."DOLocationID" = d."LocationID"
+LEFT JOIN taxi_zone_lookup pu ON g."PULocationID" = pu."LocationID"
+WHERE
+    EXTRACT(MONTH FROM CAST(g.lpep_pickup_datetime AS DATE)) = 9
+    AND EXTRACT(YEAR FROM CAST(g.lpep_pickup_datetime AS DATE)) = 2019
+    AND pu."Zone" = 'Astoria'
+	AND d."Zone" IN ('Central Park','Jamaica','JFK Airport','Long Island City/Queens Plaza' )
+GROUP BY
+	d."Zone" 
+ORDER BY 
+   SUM(g.tip_amount) DESC
+
+- Long Island City/Queens Plaza
 
 ## Terraform
 

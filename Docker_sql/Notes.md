@@ -1,20 +1,20 @@
 #### This notes take in count the next information:
 SO: Ubuntu 22.04
 Recently instalation
+# Docker
+## 🎥 Introduction to Docker
 
-# 🎥 Introduction to Docker
-
-## To install Docker in ubuntu:
+### To install Docker in ubuntu:
 https://docs.docker.com/engine/install/ubuntu/
 
-## Add User to the Docker Group:
+### Add User to the Docker Group:
 Add your user to the docker group to grant it permission to interact with the Docker daemon. Run the following command:
 ```bash
 sudo usermod -aG docker $USER
 ```
 After running this command, you will need to log out and log back in (or restart your system) for the changes to take effect. Make sure to open a new terminal window after logging in again.
 
-## Verify Group Membership:
+### Verify Group Membership:
 
 To verify that your user has been added to the docker group, you can run:
 
@@ -23,7 +23,7 @@ groups
 ```
 Ensure that docker is listed among the groups for your user.
 
-## Run docker
+### Run docker
 The following commands should be executed in the terminal. You need to run 'build' if you have made any changes to the Dockerfile or pipeline.py file
 
 ```bash
@@ -31,11 +31,11 @@ docker build -t test:pandas .
 docker run -it test:pandas
 ```
 
-## Run Docker Command Without sudo:
+### Run Docker Command Without sudo:
 After adding your user to the docker group, you should be able to run Docker commands without using sudo. Try running your docker run command again without sudo:
 
-# 🎥 Ingesting NY Taxi Data to Postgres
-## Install postgresql
+## 🎥 Ingesting NY Taxi Data to Postgres
+### Install postgresql
 
 ```bash
 docker run -it \
@@ -46,7 +46,7 @@ docker run -it \
     -p 5432:5432 \
     postgres:13
 ```
-## Install pgcli
+### Install pgcli
 In order to install pgcli ,  it’s necessary to instal pip wich is in python
 
 ```bash
@@ -64,7 +64,7 @@ Whit this command you can go into the data base the was create:
 pgcli -h localhost -p 5432 -u root -d ny_taxi
 ```
 
-## Using Jupiter Notebook
+### Using Jupiter Notebook
 
 I will install anaconda.
 https://docs.anaconda.com/free/anaconda/install/linux/
@@ -79,7 +79,7 @@ Find and Modify the c.NotebookApp.notebook_dir:
 
 c.NotebookApp.notebook_dir = '/path/to/your/notebook/folder'
 
-## Download NY Taxi Data
+### Download NY Taxi Data
 Original links of data
 https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
 https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf
@@ -87,18 +87,18 @@ https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow
 Source for this project
 https://github.com/DataTalksClub/nyc-tlc-data
 
-## converRun
+### converRun
 go to docker_sql folder (<your root folder>/Docker_sql/)
 ```bash
 gunzip yellow_tripdata_2021-01.csv.gz 
 ```
 
 
-# Connecting pgAdmin and Postgres
+## Connecting pgAdmin and Postgres
 
 docker pull dpage/pgadmin4
 
-# Running pgAdmin
+### Running pgAdmin
 If you create this pgadmin connection you can`t connect with the data base that you create before because there are in differents conteiner.
 
 ```bash
@@ -108,7 +108,7 @@ docker run -it \
   -p 8080:80 \
   dpage/pgadmin4
 ```
-# create a connection
+### create a connection
 
 ### Running Postgres and pgAdmin together
 
@@ -118,7 +118,7 @@ Create a network
 docker network create pg-network
 ```
 
-## Run Postgres (change the path)
+### Run Postgres (change the path)
 
 ```bash
 docker run -it \
@@ -132,7 +132,7 @@ docker run -it \
   postgres:13
 ```
 
-## Run pgAdmin
+### Run pgAdmin
 
 ```bash
 docker run -it \
@@ -144,13 +144,13 @@ docker run -it \
   dpage/pgadmin4
 ```
 
-## convert ipynb to py
+### convert ipynb to py
 ```bash
 jupyter nbconvert --to=script Upload-data.ipynb
 ```
 
 
-# Docker-Compose 
+## Docker-Compose 
 
 Install docker compose in ubuntu
 ```bash
@@ -158,6 +158,9 @@ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
+### Run 
+
+docker-compose up -d
 
 Note: to make pgAdmin configuration persistent, create a folder `data_pgadmin`. Change its permission via
 
@@ -166,3 +169,4 @@ mkdir data_pgadmin
 sudo chown 5050:5050 data_pgadmin
 ```
 
+# GCP
