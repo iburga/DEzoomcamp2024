@@ -50,3 +50,4 @@ terraform.rc
 # Ignore folder Keys
 # *.json
 keys/
+#terrademo/variables.tf
